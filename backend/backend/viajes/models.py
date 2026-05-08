@@ -9,6 +9,7 @@ class Vehiculo(models.Model):
     placa = models.CharField(max_length=10)
     cupos = models.IntegerField()
 
+
 class Viaje(models.Model):
     conductor = models.ForeignKey(User, on_delete=models.CASCADE)
     vehiculo = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)
@@ -19,22 +20,31 @@ class Viaje(models.Model):
     cupos_disponibles = models.IntegerField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
 
-class ListaEspera(models.Model):
+
+# NUEVO MODELO
+class Rating(models.Model):
+
+    driver = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='ratings_recibidos'
+    )
+
+    passenger = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='ratings_realizados'
+    )
+
     viaje = models.ForeignKey(
         Viaje,
-        on_delete=models.CASCADE,
-        related_name='lista_espera'
-    )
-    pasajero = models.ForeignKey(
-        User,
         on_delete=models.CASCADE
     )
-    fecha_solicitud = models.DateTimeField(auto_now_add=True)
-    notificado = models.BooleanField(default=False)
 
-    class Meta:
-        ordering = ['fecha_solicitud']
-        unique_together = ['viaje', 'pasajero']
+    score = models.IntegerField()
+    comment = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.pasajero} esperando en {self.viaje}"
+        return f"{self.driver.username} - {self.score}"

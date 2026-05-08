@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'uniride_db',
+        'NAME': 'carpulia_db',
         'USER': 'sa',
         'PASSWORD': 'Password123!',
         'HOST': 'localhost',
