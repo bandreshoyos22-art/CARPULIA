@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('UniRide - Iniciar sesión')),
+      appBar: AppBar(title: const Text('Carpulia - Iniciar sesión')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
                 labelText: 'Correo institucional',
-                hintText: 'tu.nombre@uniride.edu',
+                hintText: 'tu.nombre@carpulia.edu',
               ),
             ),
             const SizedBox(height: 16),

@@ -73,7 +73,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
     if (!_isInstitutionalEmail(email)) {
       setState(() {
-        _error = 'Usa un correo institucional de UniRide.';
+        _error = 'Usa un correo institucional de Carpulia.';
         _loading = false;
       });
       return;
@@ -110,7 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('UniRide - Registro')),
+      appBar: AppBar(title: const Text('Carpulia - Registro')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

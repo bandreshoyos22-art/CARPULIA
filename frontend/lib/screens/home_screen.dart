@@ -319,73 +319,66 @@ class _HomeScreenState extends State<HomeScreen> {
       const SnackBar(content: Text('Solicitud enviada al conductor.')),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     if (_loading || _user == null) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('UniRide - ${_user?.name ?? ''} (${_user?.role ?? ''})'),
+        title: Text(
+          'Carpulia - ${_user?.name ?? ''} (${_user?.role ?? ''})',
+        ),
+
         actions: [
-          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadData),
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: _loadData,
+          ),
+
           IconButton(
             icon: const Icon(Icons.logout),
+
             onPressed: () async {
               final navigator = Navigator.of(context);
+
               await StorageService().clearCurrentUser();
+
               if (!mounted) return;
+
               navigator.pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => const LoginScreen()),
+                MaterialPageRoute(
+                  builder: (_) => const LoginScreen(),
+                ),
                 (route) => false,
               );
             },
           ),
         ],
       ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: [_buildConductorTab(), _buildPasajeroTab()],
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) =>
-            setState(() => _selectedIndex = index),
-        destinations: _user?.role == 'pasajero'
-            ? const [
-                NavigationDestination(
-                  icon: Icon(Icons.person),
-                  label: 'Pasajero',
-                ),
-              ]
-            : _user?.role == 'conductor'
-            ? const [
-                NavigationDestination(
-                  icon: Icon(Icons.drive_eta),
-                  label: 'Conductor',
-                ),
-              ]
-            : const [
-                NavigationDestination(
-                  icon: Icon(Icons.drive_eta),
-                  label: 'Conductor',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.person),
-                  label: 'Pasajero',
-                ),
-              ],
-      ),
+
+      body: _user?.role == 'conductor'
+          ? _buildConductorTab()
+          : _buildPasajeroTab(),
     );
   }
 }
+  
 
 class _TripCard extends StatefulWidget {
   final Viaje trip;
   final void Function(Viaje trip, int seats) onRequestJoin;
 
-  const _TripCard({required this.trip, required this.onRequestJoin});
+  const _TripCard({
+    super.key,
+    required this.trip,
+    required this.onRequestJoin,
+  });
 
   @override
   State<_TripCard> createState() => _TripCardState();
@@ -397,48 +390,91 @@ class _TripCardState extends State<_TripCard> {
   @override
   Widget build(BuildContext context) {
     final trip = widget.trip;
-    final dateLabel = trip.fecha.isNotEmpty ? trip.fecha : '-';
-    final timeLabel = trip.horaSalida.isNotEmpty ? trip.horaSalida : '-';
+
+    final dateLabel =
+        trip.fecha.isNotEmpty ? trip.fecha : '-';
+
+    final timeLabel =
+        trip.horaSalida.isNotEmpty ? trip.horaSalida : '-';
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
+
       child: Padding(
         padding: const EdgeInsets.all(16),
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+
           children: [
+
             Text(
               '${trip.origen} → ${trip.destino}',
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
             ),
+
             const SizedBox(height: 8),
+
             Text('Salida: $dateLabel · $timeLabel'),
+
             const SizedBox(height: 4),
+
             Text(
-              'Cupos disponibles: ${trip.cuposDisponibles} · Precio: S/ ${trip.precio.toStringAsFixed(2)}',
+              'Cupos disponibles: ${trip.cuposDisponibles} · Precio: \$ ${trip.precio.toStringAsFixed(2)}',
             ),
+
             const SizedBox(height: 12),
+
             Row(
               children: [
+
                 const Text('Asientos:'),
+
                 const SizedBox(width: 12),
+
                 IconButton(
                   icon: const Icon(Icons.remove),
+
                   onPressed: _selectedSeats > 1
-                      ? () => setState(() => _selectedSeats--)
+                      ? () {
+                          setState(() {
+                            _selectedSeats--;
+                          });
+                        }
                       : null,
                 ),
+
                 Text('$_selectedSeats'),
+
                 IconButton(
                   icon: const Icon(Icons.add),
-                  onPressed: _selectedSeats < trip.cuposDisponibles
-                      ? () => setState(() => _selectedSeats++)
-                      : null,
+
+                  onPressed:
+                      _selectedSeats < trip.cuposDisponibles
+                          ? () {
+                              setState(() {
+                                _selectedSeats++;
+                              });
+                            }
+                          : null,
                 ),
+
                 const Spacer(),
+
                 FilledButton(
                   onPressed: trip.cuposDisponibles > 0
-                      ? () => widget.onRequestJoin(trip, _selectedSeats)
+                      ? () {
+                          widget.onRequestJoin(
+                            trip,
+                            _selectedSeats,
+                          );
+                        }
                       : null,
+
                   child: const Text('Solicitar'),
                 ),
               ],

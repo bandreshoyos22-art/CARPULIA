@@ -22,7 +22,7 @@ class StorageService {
   }
 
   Future<AppUser?> loadCurrentUser() async {
-    final userJson = _prefs.getString('uniride_current_user');
+    final userJson = _prefs.getString('carpulia_current_user');
     if (userJson == null) return null;
     try {
       return AppUser.fromJson(jsonDecode(userJson) as Map<String, dynamic>);
@@ -33,16 +33,16 @@ class StorageService {
 
   Future<void> saveCurrentUser(AppUser user) async {
     currentUser = user;
-    await _prefs.setString('uniride_current_user', jsonEncode(user.toJson()));
+    await _prefs.setString('carpulia_current_user', jsonEncode(user.toJson()));
   }
 
   Future<void> clearCurrentUser() async {
     currentUser = null;
-    await _prefs.remove('uniride_current_user');
+    await _prefs.remove('carpulia_current_user');
   }
 
   Future<List<AppUser>> loadUsers() async {
-    final usersJson = _prefs.getString('uniride_users');
+    final usersJson = _prefs.getString('carpulia_users');
     if (usersJson == null) return <AppUser>[];
     final list = jsonDecode(usersJson) as List<dynamic>;
     return list.map((item) => AppUser.fromJson(item as Map<String, dynamic>)).toList();
@@ -50,11 +50,11 @@ class StorageService {
 
   Future<void> saveUsers(List<AppUser> users) async {
     final encoded = jsonEncode(users.map((u) => u.toJson()).toList());
-    await _prefs.setString('uniride_users', encoded);
+    await _prefs.setString('carpulia_users', encoded);
   }
 
   Future<List<Viaje>> loadLocalTrips() async {
-    final viajesJson = _prefs.getString('uniride_local_viajes');
+    final viajesJson = _prefs.getString('carpulia_local_viajes');
     if (viajesJson == null) return <Viaje>[];
     final list = jsonDecode(viajesJson) as List<dynamic>;
     return list.map((item) => Viaje.fromJson(item as Map<String, dynamic>)).toList();
@@ -62,11 +62,11 @@ class StorageService {
 
   Future<void> saveLocalTrips(List<Viaje> viajes) async {
     final encoded = jsonEncode(viajes.map((v) => v.toJson()).toList());
-    await _prefs.setString('uniride_local_viajes', encoded);
+    await _prefs.setString('carpulia_local_viajes', encoded);
   }
 
   Future<List<JoinRequest>> loadRequests() async {
-    final jsonString = _prefs.getString('uniride_join_requests');
+    final jsonString = _prefs.getString('carpulia_join_requests');
     if (jsonString == null) return <JoinRequest>[];
     final list = jsonDecode(jsonString) as List<dynamic>;
     return list.map((item) => JoinRequest.fromJson(item as Map<String, dynamic>)).toList();
@@ -74,6 +74,6 @@ class StorageService {
 
   Future<void> saveRequests(List<JoinRequest> requests) async {
     final encoded = jsonEncode(requests.map((r) => r.toJson()).toList());
-    await _prefs.setString('uniride_join_requests', encoded);
+    await _prefs.setString('carpulia_join_requests', encoded);
   }
 }
