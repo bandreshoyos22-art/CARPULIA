@@ -11,21 +11,37 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import environ
+import os
+
+# Inicializar environ
+env = environ.Env(
+    # tipos de variables por defecto
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Leer archivo .env
+BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-wmq4%#3-h*9ez&9%6souz!07sq!%0w74=b9*rps$@92#286vsg'
+# SECRET_KEY = 'django-insecure-wmq4%#3-h*9ez&9%6souz!07sq!%0w74=b9*rps$@92#286vsg'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '143.198.178.182', 
+    'localhost', 
+    '127.0.0.1'
+]
 
 
 # Application definition
@@ -78,14 +94,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'carpulia_db',
-        'USER': 'sa',
-        'PASSWORD': 'Password123!',
-        'HOST': 'localhost',
-        'PORT': '1433',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
         'OPTIONS': {
             'driver': 'ODBC Driver 18 for SQL Server',
-            'extra_params': 'TrustServerCertificate=yes;',
+            'extra_params': 'Encrypt=yes;TrustServerCertificate=yes;'
         },
     }
 }
@@ -126,4 +142,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-# actualización backend1
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# STATICFILES_DIR = [
+#     BASE_DIR / 'static'
+# ]
