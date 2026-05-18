@@ -319,27 +319,18 @@ class _HomeScreenState extends State<HomeScreen> {
       const SnackBar(content: Text('Solicitud enviada al conductor.')),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     if (_loading || _user == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Carpulia - ${_user?.name ?? ''} (${_user?.role ?? ''})',
-        ),
-
+        title: Image.asset('assets/images/Logo_H.png', height: 36),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadData,
-          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadData),
 
           IconButton(
             icon: const Icon(Icons.logout),
@@ -352,9 +343,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (!mounted) return;
 
               navigator.pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (_) => const LoginScreen(),
-                ),
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
                 (route) => false,
               );
             },
@@ -368,17 +357,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-  
 
 class _TripCard extends StatefulWidget {
   final Viaje trip;
   final void Function(Viaje trip, int seats) onRequestJoin;
 
-  const _TripCard({
-    super.key,
-    required this.trip,
-    required this.onRequestJoin,
-  });
+  const _TripCard({super.key, required this.trip, required this.onRequestJoin});
 
   @override
   State<_TripCard> createState() => _TripCardState();
@@ -391,11 +375,9 @@ class _TripCardState extends State<_TripCard> {
   Widget build(BuildContext context) {
     final trip = widget.trip;
 
-    final dateLabel =
-        trip.fecha.isNotEmpty ? trip.fecha : '-';
+    final dateLabel = trip.fecha.isNotEmpty ? trip.fecha : '-';
 
-    final timeLabel =
-        trip.horaSalida.isNotEmpty ? trip.horaSalida : '-';
+    final timeLabel = trip.horaSalida.isNotEmpty ? trip.horaSalida : '-';
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -407,14 +389,10 @@ class _TripCardState extends State<_TripCard> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
 
           children: [
-
             Text(
               '${trip.origen} → ${trip.destino}',
 
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
 
             const SizedBox(height: 8),
@@ -431,7 +409,6 @@ class _TripCardState extends State<_TripCard> {
 
             Row(
               children: [
-
                 const Text('Asientos:'),
 
                 const SizedBox(width: 12),
@@ -453,14 +430,13 @@ class _TripCardState extends State<_TripCard> {
                 IconButton(
                   icon: const Icon(Icons.add),
 
-                  onPressed:
-                      _selectedSeats < trip.cuposDisponibles
-                          ? () {
-                              setState(() {
-                                _selectedSeats++;
-                              });
-                            }
-                          : null,
+                  onPressed: _selectedSeats < trip.cuposDisponibles
+                      ? () {
+                          setState(() {
+                            _selectedSeats++;
+                          });
+                        }
+                      : null,
                 ),
 
                 const Spacer(),
@@ -468,10 +444,7 @@ class _TripCardState extends State<_TripCard> {
                 FilledButton(
                   onPressed: trip.cuposDisponibles > 0
                       ? () {
-                          widget.onRequestJoin(
-                            trip,
-                            _selectedSeats,
-                          );
+                          widget.onRequestJoin(trip, _selectedSeats);
                         }
                       : null,
 

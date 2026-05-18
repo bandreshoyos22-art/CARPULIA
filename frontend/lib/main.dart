@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
 import 'services/storage_service.dart';
 
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const LoginScreen(),
+      home: const SplashScreen(),
     );
   }
 }
