@@ -20,13 +20,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Configuración'),
-      ),
+      appBar: AppBar(title: const Text('Configuración')),
 
       body: ListView(
         children: [
-
           const SizedBox(height: 12),
 
           ListTile(
@@ -37,13 +34,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const UserProfileScreen(),
-                ),
+                MaterialPageRoute(builder: (_) => const UserProfileScreen()),
               );
             },
           ),
-
           const Divider(),
 
           SwitchListTile(
@@ -121,17 +115,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const Divider(),
 
           ListTile(
-            leading: const Icon(
-              Icons.logout,
-              color: Colors.red,
-            ),
+            leading: const Icon(Icons.logout, color: Colors.red),
 
             title: const Text(
               'Cerrar sesión',
 
-              style: TextStyle(
-                color: Colors.red,
-              ),
+              style: TextStyle(color: Colors.red),
             ),
 
             onTap: () async {
@@ -141,9 +130,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const LoginScreen(),
-                ),
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
                 (route) => false,
               );
             },

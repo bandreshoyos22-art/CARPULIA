@@ -11,6 +11,7 @@ import 'create_viaje_screen.dart';
 import 'login_screen.dart';
 import 'settings_screen.dart';
 import 'trip_history_screen.dart';
+import 'register_vehiculo_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -155,6 +156,19 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(Icons.add),
             label: const Text('Crear viaje'),
             onPressed: _onCreateTrip,
+          ),
+          const SizedBox(height: 8),
+          FilledButton.tonalIcon(
+            icon: const Icon(Icons.directions_car),
+            label: const Text('Registrar vehículo'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const RegisterVehiculoScreen(),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 24),
           const Text(
