@@ -12,6 +12,7 @@ import 'login_screen.dart';
 import 'settings_screen.dart';
 import 'trip_history_screen.dart';
 import 'register_vehiculo_screen.dart';
+import 'calificacion_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -191,6 +192,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 subtitle: Text(
                   'Salida: ${trip.fecha} ${trip.horaSalida} · Cupos: ${trip.cuposDisponibles} · Precio: S/ ${trip.precio.toStringAsFixed(2)}',
                 ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.star, color: Colors.amber),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            CalificacionScreen(viaje: trip, esConductor: true),
+                      ),
+                    );
+                  },
+                ),
               ),
             );
           }),
@@ -306,7 +319,29 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text('No se encontraron viajes para ese destino.'),
             ),
           ...filtered.map(
-            (trip) => _TripCard(trip: trip, onRequestJoin: _createRequest),
+            (trip) => Column(
+              children: [
+                _TripCard(trip: trip, onRequestJoin: _createRequest),
+
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    icon: const Icon(Icons.star, color: Colors.amber),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CalificacionScreen(
+                            viaje: trip,
+                            esConductor: false,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

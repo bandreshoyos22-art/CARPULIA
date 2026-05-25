@@ -7,6 +7,7 @@ import '../models/solicitud.dart';
 import '../models/user.dart';
 import '../models/viaje.dart';
 import '../models/vehiculo.dart';
+import '../models/calificacion.dart';
 
 class StorageService {
   static final StorageService _instance = StorageService._internal();
@@ -143,6 +144,22 @@ class StorageService {
     final list = jsonDecode(jsonString) as List<dynamic>;
     return list
         .map((item) => Vehiculo.fromJson(item as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<void> saveCalificacion(Calificacion calificacion) async {
+    final calificaciones = await loadCalificaciones();
+    calificaciones.add(calificacion);
+    final encoded = jsonEncode(calificaciones.map((c) => c.toJson()).toList());
+    await _prefs.setString('carpulia_calificaciones', encoded);
+  }
+
+  Future<List<Calificacion>> loadCalificaciones() async {
+    final jsonString = _prefs.getString('carpulia_calificaciones');
+    if (jsonString == null) return <Calificacion>[];
+    final list = jsonDecode(jsonString) as List<dynamic>;
+    return list
+        .map((item) => Calificacion.fromJson(item as Map<String, dynamic>))
         .toList();
   }
 }
