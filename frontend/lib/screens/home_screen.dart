@@ -10,6 +10,7 @@ import 'chat_screen.dart';
 import 'create_viaje_screen.dart';
 import 'login_screen.dart';
 import 'settings_screen.dart';
+import 'trip_history_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -323,80 +324,69 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     if (_loading || _user == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
-  appBar: AppBar(
-    title: Image.asset(
-      'assets/images/Logo_H.png',
-      height: 36,
-    ),
+      appBar: AppBar(
+        title: Image.asset('assets/images/Logo_H.png', height: 36),
 
-    actions: [
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.history),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const TripHistoryScreen()),
+              );
+            },
+          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadData),
 
-      IconButton(
-        icon: const Icon(Icons.refresh),
-        onPressed: _loadData,
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
+            },
+          ),
+
+          IconButton(
+            icon: const Icon(Icons.logout),
+
+            onPressed: () async {
+              final navigator = Navigator.of(context);
+
+              await StorageService().clearCurrentUser();
+
+              if (!mounted) return;
+
+              navigator.pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+                (route) => false,
+              );
+            },
+          ),
+        ],
       ),
 
-      IconButton(
-        icon: const Icon(Icons.settings),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const SettingsScreen(),
-            ),
-          );
-        },
-      ),
-
-      IconButton(
-        icon: const Icon(Icons.logout),
-
-        onPressed: () async {
-          final navigator = Navigator.of(context);
-
-          await StorageService().clearCurrentUser();
-
-          if (!mounted) return;
-
-          navigator.pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (_) => const LoginScreen(),
-            ),
-            (route) => false,
-          );
-        },
-      ),
-    ],
-  ),
-
-  body: _user?.role == 'conductor'
-      ? _buildConductorTab()
-      : _buildPasajeroTab(),
-);
+      body: _user?.role == 'conductor'
+          ? _buildConductorTab()
+          : _buildPasajeroTab(),
+    );
   }
 }
-
 
 class _TripCard extends StatefulWidget {
   final Viaje trip;
   final void Function(Viaje trip, int seats) onRequestJoin;
 
-  const _TripCard({
-    super.key,
-    required this.trip,
-    required this.onRequestJoin,
-  });
+  const _TripCard({super.key, required this.trip, required this.onRequestJoin});
 
   @override
   State<_TripCard> createState() => _TripCardState();
@@ -421,10 +411,7 @@ class _TripCardState extends State<_TripCard> {
           children: [
             Text(
               '${trip.origen} → ${trip.destino}',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
 
             const SizedBox(height: 8),
@@ -474,10 +461,7 @@ class _TripCardState extends State<_TripCard> {
                 FilledButton(
                   onPressed: trip.cuposDisponibles > 0
                       ? () {
-                          widget.onRequestJoin(
-                            trip,
-                            _selectedSeats,
-                          );
+                          widget.onRequestJoin(trip, _selectedSeats);
                         }
                       : null,
                   child: const Text('Solicitar'),
@@ -490,9 +474,8 @@ class _TripCardState extends State<_TripCard> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ChatScreen(
-                          userEmail: trip.conductorEmail,
-                        ),
+                        builder: (_) =>
+                            ChatScreen(userEmail: trip.conductorEmail),
                       ),
                     );
                   },
